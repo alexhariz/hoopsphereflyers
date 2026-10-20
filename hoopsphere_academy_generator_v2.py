@@ -142,7 +142,15 @@ PROGRAM_ASSET = {
     'Additional Weekly Classes': 'HoopSphere_Skills_v2.pdf',
     'No Changes to Your Current Schedule': None,
 }
-PATHWAY_ASSET = 'HoopSphere_Pathway_v2.pdf'
+# Pathway guide variant whose ladder highlights the recommended program.
+PATHWAY_ASSET = {
+    'Prep League':               'HoopSphere_Pathway_v2.pdf',
+    'Academy League':            'HoopSphere_Pathway_Academy_League_v2.pdf',
+    'Elite Sessions':            'HoopSphere_Pathway_Elite_Sessions_v2.pdf',
+    'AAU Tryout':                'HoopSphere_Pathway_AAU_v2.pdf',
+    'Additional Weekly Classes': 'HoopSphere_Pathway_Skills_v2.pdf',
+    'No Changes to Your Current Schedule': 'HoopSphere_Pathway_Neutral_v2.pdf',
+}
 
 PRON = {
     'Male':   {'he': 'he', 'He': 'He', 'him': 'him', 'his': 'his', 'His': 'His'},
@@ -533,7 +541,7 @@ def generate(data, program_path=None, pathway_path=None, out_dir='/mnt/user-data
     if asset and not program_path:
         program_path = _fetch_asset(asset)
     if not pathway_path:
-        pathway_path = _fetch_asset(PATHWAY_ASSET)
+        pathway_path = _fetch_asset(PATHWAY_ASSET.get(data['recommendation'], 'HoopSphere_Pathway_v2.pdf'))
     os.makedirs(out_dir, exist_ok=True)
     body = os.path.join(tempfile.gettempdir(), 'hs_report_v2_body.pdf')
     c = canvas.Canvas(body, pagesize=letter)
