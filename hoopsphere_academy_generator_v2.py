@@ -510,8 +510,25 @@ def _fetch_asset(fname):
                 '(repo root) or pass a local path, then rerun. (%s)' % (fname, e))
     return p
 
+def _capname(s):
+    """First letter of each name word uppercased; nothing is lowercased,
+    so DeAndre, McCall, O'Brien pass through as typed."""
+    out, up = [], True
+    for ch in str(s):
+        if up and ch.isalpha():
+            out.append(ch.upper()); up = False
+        else:
+            out.append(ch)
+            if ch in " -'.":
+                up = True
+    return ''.join(out)
+
+
 def generate(data, program_path=None, pathway_path=None, out_dir='/mnt/user-data/outputs'):
     _validate(data)
+    data = dict(data)
+    for _k in ('player', 'coach', 'advisor'):
+        data[_k] = _capname(data[_k])
     asset = PROGRAM_ASSET.get(data['recommendation'])
     if asset and not program_path:
         program_path = _fetch_asset(asset)

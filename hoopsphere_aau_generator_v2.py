@@ -331,8 +331,25 @@ def _validate(d):
     if 'recommendation' in d:
         raise ValueError('AAU reports carry no recommendation; this belongs in Academy Skills Progress Reports')
 
+def _capname(s):
+    """First letter of each name word uppercased; nothing is lowercased,
+    so DeAndre, McCall, O'Brien pass through as typed."""
+    out, up = [], True
+    for ch in str(s):
+        if up and ch.isalpha():
+            out.append(ch.upper()); up = False
+        else:
+            out.append(ch)
+            if ch in " -'.":
+                up = True
+    return ''.join(out)
+
+
 def generate(data, out_dir='/mnt/user-data/outputs'):
     _validate(data)
+    data = dict(data)
+    for _k in ('player', 'coach'):
+        data[_k] = _capname(data[_k])
     os.makedirs(out_dir, exist_ok=True)
     safe = re.sub(r"[^A-Za-z0-9 .\-']", '', str(data['player'])).strip()
     out = os.path.join(out_dir, f'{safe} - Player Progress Report.pdf')
