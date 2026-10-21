@@ -537,6 +537,8 @@ def generate(data, program_path=None, pathway_path=None, out_dir='/mnt/user-data
     data = dict(data)
     for _k in ('player', 'coach', 'advisor'):
         data[_k] = _capname(data[_k])
+    if str(data['coach']).split(' ', 1)[0].lower() != 'coach':
+        data['coach'] = 'Coach ' + data['coach']
     asset = PROGRAM_ASSET.get(data['recommendation'])
     if asset and not program_path:
         program_path = _fetch_asset(asset)

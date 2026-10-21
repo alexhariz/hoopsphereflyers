@@ -350,6 +350,8 @@ def generate(data, out_dir='/mnt/user-data/outputs'):
     data = dict(data)
     for _k in ('player', 'coach'):
         data[_k] = _capname(data[_k])
+    if str(data['coach']).split(' ', 1)[0].lower() != 'coach':
+        data['coach'] = 'Coach ' + data['coach']
     os.makedirs(out_dir, exist_ok=True)
     safe = re.sub(r"[^A-Za-z0-9 .\-']", '', str(data['player'])).strip()
     out = os.path.join(out_dir, f'{safe} - Player Progress Report.pdf')
